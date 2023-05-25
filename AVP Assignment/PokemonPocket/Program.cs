@@ -151,17 +151,41 @@ namespace PokemonPocket
 
                             // Combat 
                             while (pokemon.HP > 0 || opp.HP > 0) {
-                                if (pokemon.HP == 0) {
+                                // Opponent attacks first 
+                                Console.WriteLine($"{opp.Name} (Opp) used {opp.Skill}!");
+                                pokemon.calculateDamage(opp.Skill_Dmg); // Pokemon takes damage
+                                if (pokemon.HP == 0) {  // If pokemon fainted, player loses
                                     Console.WriteLine($"{pokemon.Name} has fainted");
+                                    Console.WriteLine("You Lose!");
                                 }
                                 else {
-                                    Console.WriteLine($"{opp} (Opp) used {opp.Skill}!");
-                                    pokemon.calculateDamage(opp.Skill_Dmg);
+                                    // Show player's pokemon HP left
                                     Console.WriteLine($"{pokemon.Name} has {pokemon.HP} left!");
+                                    // Player's pokemon attacks opponent
+                                    Console.WriteLine($"{pokemon.Name} used {pokemon.Skill}!");
+                                    opp.calculateDamage(pokemon.Skill_Dmg); // Opponent takes damage
+                                    if (opp.HP == 0) { // If opponent pokemon fainted, player wins
+                                        Console.WriteLine($"{opp.Name} has fainted!");
+                                        Console.WriteLine("You Win!")
+                                    }
+                                    else {
+                                        // Show opponent HP left
+                                        Console.WriteLine($"{opp.Name} has {op.HP} left!")
+                                    }
                                 }
+                            }
+                            // Ask player if they want to continue
+                            Console.WriteLine("Do you want to continue (Y/N): ");
+                            string continue = Console.ReadLine().ToLower();
+                            // if player does not enter yes, break while loop 
+                            if (continue != "y") {
+                                battle = false;
                             }
                         }
                     }
+                }
+                else if (option == "6") { // Heal Pokemon that has been damaged or fainted 
+                
                 }
                 else {
                     Environment.Exit(0);
