@@ -52,6 +52,11 @@ namespace PokemonPocket{
                 multiplier = 3;
             }
             this.HP -= (multiplier * opp_dmg);
+
+            // If hp goes below 0, pokemon has fainted, set hp to 0
+            if (this.HP < 0) {
+                this.HP = 0;
+            }
         }
         public virtual int getCount() {
             return Count;
