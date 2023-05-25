@@ -26,6 +26,7 @@ namespace PokemonPocket
 
             // Initialise Function
             Funct functions = new Funct();
+            Random rdm = new Random();
             
             //Use "Environment.Exit(0);" if you want to implement an exit of the console program
             //Start your assignment 1 requirements below.
@@ -96,42 +97,76 @@ namespace PokemonPocket
                         Console.WriteLine("No pokemon can evolve.");
                     }
                     else {
-                        
+                        foreach (var i in db) {
+                            if (functions.checkEvolve(i.Name.ToLower(), db, pokemonMasters)) {
+                                var evolveto = pokemonMasters.Where(p=> p.Name.ToLower() == i.Name.ToLower()).Select(p=> p.EvolveTo).First();
+                                Console.WriteLine($"{i.Name} --> {evolveto}"); 
+                                // Prints x times based on x number of pokemon with same type (FIX)
+                            }
+                        }
                     }
                 }    
-                else if (option == "4") {
+                else if (option == "4") {   // Evolve Pokemon
                     if (functions.checkDbEvolve(db, pokemonMasters)) { // If there are pokemon that can be evolved 
                         Console.WriteLine("Enter Pokemon's Name to Evolve: ");
                         string pokemon_name = Console.ReadLine().ToLower();
-                        if (functions.checkEvolve(pokemon_name ,db, pokemonMasters)) {
-                            functions.Evolve(pokemon_name, db, pokemonMasters);
+                        if (functions.checkEvolve(pokemon_name ,db, pokemonMasters)) { // If given pokemon can evolve
+                            functions.Evolve(pokemon_name, db, pokemonMasters); // Evolve function
                         }
                         else {
-                            Console.WriteLine($"{pokemon_name} cannot be evolved");
+                            Console.WriteLine($"{pokemon_name} cannot be evolved"); 
                         }
-                        
                     }
                     else {
                         Console.WriteLine("No pokemon can evolve.");
+                    }
+                }
+                else if (option == "5") {   // Battling Pokemon
+                    // Create a list of pokemon that can be fought
+                    List<Pokemon> battle_pokemon = new List<Pokemon>();
+                    // Create pokemon to fight with random HP 
+                    var battle_pikachu = new Pikachu("Pikachu", rdm.Next(10, 90), 0);
+                    var battle_eevee = new Pikachu("Eevee", rdm.Next(10, 90), 0);
+                    var battle_char = new Pikachu("Charmander", rdm.Next(10, 90), 0);
+                    // Decrement respective pokemon count to compensate for initialisation 
+                    battle_pikachu.decCount();
+                    battle_eevee.decCount();
+                    battle_char.decCount();
+                    // Add pokemon to battle list
+                    battle_pokemon.Add(battle_pikachu);
+                    battle_pokemon.Add(battle_eevee);
+                    battle_pokemon.Add(battle_char);
+
+                    Boolean battle = true;
+                    while (battle) {
+                        // Prompt user for chosen pokemon to use in battle
+                        Console.WriteLine("Choose Pokemon to use in battle: ");
+                        var pokemon_name = Console.ReadLine().ToLower();
+                        if (functions.checkName(pokemon_name, db)) {
+                            // Declare a random pokemon to battle against
+                            int opp_ind = rdm.Next(battle_pokemon.Count);
+                            var opp = battle_pokemon[opp_ind];
+                            // Take the first (most hp) pokemon in db with the given name
+                            var pokemon = db.Where(p=>p.Name.ToLower() == pokemon_name).First();
+
+                            // Combat 
+                            while (pokemon.HP > 0 || opp.HP > 0) {
+                                if (pokemon.HP == 0) {
+                                    Console.WriteLine($"{pokemon.Name} has fainted");
+                                }
+                                else {
+                                    Console.WriteLine($"{opp} (Opp) used {opp.Skill}!");
+                                    pokemon.calculateDamage(opp.Skill_Dmg);
+                                    Console.WriteLine($"{pokemon.Name} has {pokemon.HP} left!");
+                                }
+                            }
+                        }
                     }
                 }
                 else {
                     Environment.Exit(0);
                 }
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
     }
 }
