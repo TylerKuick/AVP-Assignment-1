@@ -34,9 +34,8 @@ namespace Function {
 
 
         // Checks a single pokemon can be evolved
-        public Boolean checkEvolve <T>(T name, List<Pokemon> db, List<PokemonMaster> pokemonMasters) {
+        public Boolean checkEvolve(string name, List<Pokemon> db, List<PokemonMaster> pokemonMasters) {
             Boolean canEvolve = false;
-            // if name is a string type
             foreach (var i in db) {
                 foreach (var j in pokemonMasters) {
                     if ((name.Equals(i.Name.ToLower()) && (name.Equals(j.Name.ToLower())))) {
@@ -48,8 +47,6 @@ namespace Function {
                 }
             } 
             return canEvolve;
-
-            // if name is a pokemon type
         }
 
         // Evolve Pokemon
@@ -65,8 +62,4 @@ namespace Function {
             evolve_pokemon.decCount(); // Decrease Pokemon count
         }
     }
-    
-        
-    
 }
-
