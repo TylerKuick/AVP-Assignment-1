@@ -17,4 +17,9 @@ This class has 3 objects – Pikachu, Eevee and Charmander.
 Create a Pokemon class and implement subclasses for the 3 pokemons. 
 This means that the players can only add these 3 pokemon characters to the pocket. You can add more pokemon subclasses to make your program more interesting if you want to. 
 The Pokemon class should have the following attributes:  
- - Name of Pokemon
+ - Name of Pokemon 
+ - HP
+ - Exp (Experience)
+ - Skill 
+ - Skill Damage   
+
