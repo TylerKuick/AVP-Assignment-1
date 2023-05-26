@@ -54,18 +54,18 @@ namespace PokemonPocket
                         int pokemon_hp = int.Parse(Console.ReadLine());
                         Console.WriteLine("Enter Pokemon's Exp: ");
                         int pokemon_exp = int.Parse(Console.ReadLine());
-                        if (pokemon_name.Equals("pikachu")){
+                        if (pokemon_name.ToLower().Equals("pikachu")){
                             db.Add(new Pikachu(pokemon_name, pokemon_hp, pokemon_exp)); 
                         }
-                        else if (pokemon_name.Equals("eevee")) {
+                        else if (pokemon_name.ToLower().Equals("eevee")) {
                             db.Add(new Eevee(pokemon_name, pokemon_hp, pokemon_exp));
                         }
-                        else if (pokemon_name.Equals("charmander")) {
+                        else if (pokemon_name.ToLower().Equals("charmander")) {
                             db.Add(new Charmander(pokemon_name, pokemon_hp, pokemon_exp));
                         }
                     }
                     else {
-                        Console.WriteLine($"{pokemon_name} not found in the database!");
+                        Console.WriteLine("Please enter a valid pokemon.");
                     }
                 }
                 else if (option == "2") { // Show List of Pokemon in Pocket
@@ -97,12 +97,15 @@ namespace PokemonPocket
                         Console.WriteLine("No pokemon can evolve.");
                     }
                     else {
-                        foreach (var i in db) {
-                            if (functions.checkEvolve(i.Name.ToLower(), db, pokemonMasters)) {
-                                var evolveto = pokemonMasters.Where(p=> p.Name.ToLower() == i.Name.ToLower()).Select(p=> p.EvolveTo).First();
-                                Console.WriteLine($"{i.Name} --> {evolveto}"); 
-                                // Prints x times based on x number of pokemon with same type (FIX)
+                        var compare = db[0].Name;
+                        for (var i=1; i<db.Count; i++) {
+                            if (db[i].Name.ToLower() != compare.ToLower()) {
+                                if (functions.checkEvolve(db[i].Name.ToLower(), db, pokemonMasters)) {
+                                    var evolveto = pokemonMasters.Where(p=> p.Name.ToLower() == db[i].Name.ToLower()).Select(p=> p.EvolveTo).First();
+                                    Console.WriteLine($"{db[i].Name} --> {evolveto}");
+                                } 
                             }
+                            compare = db[i].Name;
                         }
                     }
                 }    
@@ -112,6 +115,17 @@ namespace PokemonPocket
                         string pokemon_name = Console.ReadLine().ToLower();
                         if (functions.checkEvolve(pokemon_name ,db, pokemonMasters)) { // If given pokemon can evolve
                             functions.Evolve(pokemon_name, db, pokemonMasters); // Evolve function
+                            for (var i=db.Count-1; i>0; i--) {
+                                for (var j=0; j<i; j++) {
+                                    if (j+1 < db.Count) {
+                                        if (db[j].HP < db[j+1].HP) {
+                                            var tmp = db[j];
+                                            db[j] = db[j+1];
+                                            db[j+1] = tmp;
+                                        }
+                                    }
+                                }
+                            }
                             foreach (var i in db) {
                                 Console.WriteLine(@$"
                         ----------------------------------
