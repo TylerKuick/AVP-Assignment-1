@@ -61,5 +61,11 @@ namespace Function {
             evolve_pokemon.Org_HP = 100;
             evolve_pokemon.decCount(); // Decrease Pokemon count
         }
+        
+        // Heal Pokemon
+        public void Heal(Pokemon pokemon) {
+            pokemon.HP = pokemon.Org_HP;
+        }
+        
     }
 }
