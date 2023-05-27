@@ -39,9 +39,9 @@ namespace PokemonPocket{
         // Methods
         public void calculateDamage(int opp_dmg) {
             int multiplier = 0;
-            var ref_pikachu = new Pikachu();
-            var ref_eevee = new Eevee();
-            var ref_charmander = new Charmander();
+            var ref_pikachu = new Pikachu("Pikachu", 100);
+            var ref_eevee = new Eevee("Eevee", 100);
+            var ref_charmander = new Charmander("Charmander", 100);
             if (ref_pikachu.Skill_Dmg == opp_dmg) {
                 multiplier = 1;
             }
@@ -69,7 +69,15 @@ namespace PokemonPocket{
     
     public class Pikachu : Pokemon {
         private static int Count = 0; 
-        public Pikachu() {}
+        // Initialise pokemon to reference during battle 
+        public Pikachu(string name, int hp) {
+            this.Name = name;
+            this.HP = hp;
+            this.Skill = "Lightning Bolt";
+            this.Skill_Dmg = 25;
+        }
+
+        // Initialise pokemon as player accessible object
         public Pikachu(string name, int hp, int exp) : base(name, hp, exp) {
             this.Name = name;
             this.HP = hp;
@@ -92,7 +100,15 @@ namespace PokemonPocket{
     
     public class Eevee : Pokemon {
         private static int Count = 0; 
-        public Eevee() {}
+        // Initialise pokemon to reference during battle 
+        public Eevee(string name, int hp) {
+            this.Name = name;
+            this.HP = hp;
+            this.Skill = "Run Away";
+            this.Skill_Dmg = 20;
+        }
+
+        // Initialise pokemon as player accessible object
         public Eevee(string name, int hp, int exp) : base(name, hp, exp) {
             this.Name = name;
             this.HP = hp;
@@ -115,7 +131,15 @@ namespace PokemonPocket{
 
     public class Charmander : Pokemon {
         private static int Count = 0; 
-        public Charmander() {}
+        // Initialise pokemon to reference during battle 
+        public Charmander(string name, int hp) {
+            this.Name = name;
+            this.HP = hp;
+            this.Skill = "Solar Power";
+            this.Skill_Dmg = 15;
+        }
+        
+        // Initialise pokemon as player accessible object
         public Charmander(string name, int hp, int exp) : base(name, hp, exp) {
             this.Name = name;
             this.HP = hp;

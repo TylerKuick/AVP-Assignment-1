@@ -49,7 +49,7 @@ namespace PokemonPocket
                 if (option == "1") {
                     Console.WriteLine("Enter Pokemon's Name: ");
                     string pokemon_name = Console.ReadLine();
-                    if (functions.checkName(pokemon_name.ToLower(), db)){
+                    if (functions.checkMasterName(pokemon_name.ToLower(), pokemonMasters)){
                         Console.WriteLine("Enter Pokemon's HP: ");
                         int pokemon_hp = int.Parse(Console.ReadLine());
                         Console.WriteLine("Enter Pokemon's Exp: ");
@@ -97,15 +97,11 @@ namespace PokemonPocket
                         Console.WriteLine("No pokemon can evolve.");
                     }
                     else {
-                        var compare = db[0].Name;
-                        for (var i=1; i<db.Count; i++) {
-                            if (db[i].Name.ToLower() != compare.ToLower()) {
-                                if (functions.checkEvolve(db[i].Name.ToLower(), db, pokemonMasters)) {
-                                    var evolveto = pokemonMasters.Where(p=> p.Name.ToLower() == db[i].Name.ToLower()).Select(p=> p.EvolveTo).First();
-                                    Console.WriteLine($"{db[i].Name} --> {evolveto}");
-                                } 
-                            }
-                            compare = db[i].Name;
+                        foreach (var i in pokemonMasters) { // loop through valid pokemon
+                            if (functions.checkEvolve(i.Name.ToLower(), db, pokemonMasters)) {  // insert pokemon name into checkEvolve function
+                                var evolveto = pokemonMasters.Where(p=> p.Name.ToLower() == i.Name.ToLower()).Select(p=> p.EvolveTo).First();   // get evolved pokemon name
+                                Console.WriteLine($"{i.Name} --> {evolveto}");  // display message
+                            } 
                         }
                     }
                 }    
@@ -145,22 +141,19 @@ namespace PokemonPocket
                     }
                 }
                 else if (option == "5") {   // Battling Pokemon
+                    Boolean battle = true;
                     // Create a list of pokemon that can be fought
                     List<Pokemon> battle_pokemon = new List<Pokemon>();
+                    
                     // Create pokemon to fight with random HP 
-                    var battle_pikachu = new Pikachu("Pikachu", rdm.Next(10, 90), 0);
-                    var battle_eevee = new Eevee("Eevee", rdm.Next(10, 90), 0);
-                    var battle_char = new Charmander("Charmander", rdm.Next(10, 90), 0);
-                    // Decrement respective pokemon count to compensate for initialisation 
-                    battle_pikachu.decCount();
-                    battle_eevee.decCount();
-                    battle_char.decCount();
+                    var battle_pikachu = new Pikachu("Pikachu", rdm.Next(10, 90));
+                    var battle_eevee = new Eevee("Eevee", rdm.Next(10, 90));
+                    var battle_char = new Charmander("Charmander", rdm.Next(10, 90));
+
                     // Add pokemon to battle list
                     battle_pokemon.Add(battle_pikachu);
                     battle_pokemon.Add(battle_eevee);
                     battle_pokemon.Add(battle_char);
-
-                    Boolean battle = true;
                     while (battle) {
                         // Find all pokemon that can battle 
                         var pokemon_list = db.Where(p=>p.HP > 0).ToList();
@@ -181,7 +174,7 @@ namespace PokemonPocket
                                     var pokemon = db.Where(p=>p.Name.ToLower() == pokemon_name && p.HP > 0).First();
                                     // Combat 
                                     while (pokemon.HP > 0 && opp.HP > 0) {
-                                    // Opponent attacks first 
+                                        // Opponent attacks first 
                                         Console.WriteLine($"{opp.Name} (Opp) used {opp.Skill}!");
                                         pokemon.calculateDamage(opp.Skill_Dmg); // Pokemon takes damage
                                         if (pokemon.HP <= 0) {  // If pokemon fainted, player loses
@@ -214,19 +207,30 @@ namespace PokemonPocket
                                 // if player does not enter yes, break while loop 
                                 if (cont != "y") {
                                     battle = false;
-                                }
+                                }  
                             }
                             else if (!functions.checkName(pokemon_name, pokemon_list) && functions.checkName(pokemon_name, db)) {
                                 Console.WriteLine($"{pokemon_name} has already fainted!");
                             }
                             else {
-                                Console.WriteLine("Pokemon not found in database");
+                                Console.WriteLine("Pokemon not found in pocket");
                             }
                         }
                     }
                 }
                 else if (option == "6") { // Heal Pokemon that has been damaged or fainted 
                     var heal_list = db.Where(p=> p.HP < p.Org_HP).ToList();     // If pokemon current HP less than original HP
+                    for (var i=db.Count-1; i>0; i--) {
+                        for (var j=0; j<i; j++) {
+                            if (j+1 < db.Count) {
+                                if (db[j].HP < db[j+1].HP) {
+                                    var tmp = db[j];
+                                    db[j] = db[j+1];
+                                    db[j+1] = tmp;
+                                }
+                            }
+                        }
+                    }
                     foreach (var i in heal_list) {  // Show list of pokemon that need healing
                         Console.WriteLine(@$"
                 ----------------------------------

@@ -5,6 +5,18 @@ using PokemonPocket;
 
 namespace Function {
     public class Funct {
+
+        public Boolean checkMasterName(string name, List<PokemonMaster> pokemonMasters) {
+            Boolean valid = false;
+            foreach (var i in pokemonMasters) {
+                if(name.Equals(i.Name.ToLower())) {
+                    valid = true;
+                    return valid;
+                }
+            }
+            return valid;
+        }
+        
         public Boolean checkName(string name, List<Pokemon> db) {
             Boolean valid = false;
             foreach (var i in db) {
@@ -36,17 +48,18 @@ namespace Function {
         // Checks a single pokemon can be evolved
         public Boolean checkEvolve(string name, List<Pokemon> db, List<PokemonMaster> pokemonMasters) {
             Boolean canEvolve = false;
-            foreach (var i in db) {
-                foreach (var j in pokemonMasters) {
-                    if ((name.Equals(i.Name.ToLower()) && (name.Equals(j.Name.ToLower())))) {
-                        if (i.getCount() >= j.NoToEvolve) {
-                            canEvolve =true;
-                            return canEvolve;
-                        }
-                    }
+            try {
+                var pokemon = db.Where(p=> p.Name.ToLower() == name.ToLower()).First();
+                int no_to_evolve = pokemonMasters.Where(p=> p.Name.ToLower() == name.ToLower()).Select(p=> p.NoToEvolve).First();
+                if (pokemon.getCount() >= no_to_evolve) {
+                    canEvolve =true;
+                    return canEvolve;
                 }
-            } 
-            return canEvolve;
+                return canEvolve;
+            }
+            catch (System.InvalidOperationException) {
+                return canEvolve;
+            }
         }
 
         // Evolve Pokemon
