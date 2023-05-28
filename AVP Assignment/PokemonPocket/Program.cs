@@ -19,9 +19,9 @@ namespace PokemonPocket
             // Database 
             List<Pokemon> db = new List<Pokemon>() {
                 new Pikachu("Pikachu", 50, 20),
+                new Pikachu("Pikachu", 50, 20),
                 new Eevee("Eevee", 30, 10),
-                new Eevee("Eevee", 60, 9),
-                new Charmander("Charmander", 40, 0)
+                new Eevee("Eevee", 60, 9)
             };
 
             // Initialise Function
@@ -50,18 +50,23 @@ namespace PokemonPocket
                     Console.WriteLine("Enter Pokemon's Name: ");
                     string pokemon_name = Console.ReadLine();
                     if (functions.checkMasterName(pokemon_name.ToLower(), pokemonMasters)){
-                        Console.WriteLine("Enter Pokemon's HP: ");
-                        int pokemon_hp = int.Parse(Console.ReadLine());
-                        Console.WriteLine("Enter Pokemon's Exp: ");
-                        int pokemon_exp = int.Parse(Console.ReadLine());
-                        if (pokemon_name.ToLower().Equals("pikachu")){
-                            db.Add(new Pikachu(pokemon_name, pokemon_hp, pokemon_exp)); 
+                        try{
+                            Console.WriteLine("Enter Pokemon's HP: ");
+                            int pokemon_hp = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Enter Pokemon's Exp: ");
+                            int pokemon_exp = int.Parse(Console.ReadLine());
+                            if (pokemon_name.ToLower().Equals("pikachu")){
+                                db.Add(new Pikachu(pokemon_name, pokemon_hp, pokemon_exp)); 
+                            }
+                            else if (pokemon_name.ToLower().Equals("eevee")) {
+                                db.Add(new Eevee(pokemon_name, pokemon_hp, pokemon_exp));
+                            }
+                            else if (pokemon_name.ToLower().Equals("charmander")) {
+                                db.Add(new Charmander(pokemon_name, pokemon_hp, pokemon_exp));
+                            }
                         }
-                        else if (pokemon_name.ToLower().Equals("eevee")) {
-                            db.Add(new Eevee(pokemon_name, pokemon_hp, pokemon_exp));
-                        }
-                        else if (pokemon_name.ToLower().Equals("charmander")) {
-                            db.Add(new Charmander(pokemon_name, pokemon_hp, pokemon_exp));
+                        catch (System.FormatException) {
+                            Console.WriteLine("Please only enter numbers (1-100) for HP and Exp.");
                         }
                     }
                     else {
