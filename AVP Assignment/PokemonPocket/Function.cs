@@ -5,7 +5,6 @@ using PokemonPocket;
 
 namespace Function {
     public class Funct {
-
         public Boolean checkMasterName(string name, List<PokemonMaster> pokemonMasters) {
             Boolean valid = false;
             foreach (var i in pokemonMasters) {
@@ -16,7 +15,7 @@ namespace Function {
             }
             return valid;
         }
-        
+
         public Boolean checkName(string name, List<Pokemon> db) {
             Boolean valid = false;
             foreach (var i in db) {
@@ -74,11 +73,10 @@ namespace Function {
             evolve_pokemon.Org_HP = 100;
             evolve_pokemon.decCount(); // Decrease Pokemon count
         }
-        
+
         // Heal Pokemon
         public void Heal(Pokemon pokemon) {
             pokemon.HP = pokemon.Org_HP;
         }
-        
     }
 }
